@@ -16,6 +16,25 @@ public class HomeController : Controller
         return View();
     }
 
+    [HttpGet]
+    public IActionResult ReportIssue()
+    {
+        return View(new IssueReportViewModel());
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult ReportIssue(IssueReportViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        TempData["IssueReportedMessage"] = "Thanks, your issue report was submitted.";
+        return RedirectToAction(nameof(ReportIssue));
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {

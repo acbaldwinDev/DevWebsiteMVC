@@ -1,0 +1,48 @@
+@model DevWebsiteMVC.Models.IssueReportViewModel
+@{
+    ViewData["Title"] = "Report an Issue";
+}
+
+<h1>@ViewData["Title"]</h1>
+<p>Use this form to report bugs, errors, or unexpected behavior.</p>
+
+@if (TempData["IssueReportedMessage"] is string message)
+{
+    <div class="alert alert-success" role="alert">
+        @message
+    </div>
+}
+
+<form asp-action="ReportIssue" method="post" class="mt-4">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Subject" class="form-label"></label>
+        <input asp-for="Subject" class="form-control" />
+        <span asp-validation-for="Subject" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control" rows="6"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit Issue</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
