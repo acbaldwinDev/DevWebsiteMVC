@@ -18,6 +18,8 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+app.MapControllers();
+
 app.MapStaticAssets();
 
 app.MapControllerRoute(
@@ -27,3 +29,4 @@ app.MapControllerRoute(
 
 
 app.Run();
+
