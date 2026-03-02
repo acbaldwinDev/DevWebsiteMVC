@@ -8,5 +8,18 @@
 </div>
 
 
+<script src="~/Scripts/angular.min.js"></script>
+<script src="~/Scripts/app.js"></script>
+
+<div ng-app="myApp" ng-controller="homeController">
+
+    <h2>{{ message }}</h2>
+
+    <button ng-click="getData()">Get Server Message</button>
+
+    <p>{{ serverMessage }}</p>
+
+</div>
+
 <div id="root"></div>
 <script type="module" src="/src/main.jsx"></script>
