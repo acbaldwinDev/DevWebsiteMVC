@@ -21,6 +21,11 @@ public class HomeController : Controller
         return View();
     }
 
+    public IActionResult AngularOrders()
+    {
+        return View();
+    }
+
     [HttpGet]
     public IActionResult ReportIssue()
     {

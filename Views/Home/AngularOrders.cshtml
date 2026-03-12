@@ -1,0 +1,141 @@
+@{
+    ViewData["Title"] = "AngularJS Orders";
+}
+
+<div ng-app="ordersApp" ng-controller="OrdersController as vm" class="mt-4">
+    <div class="d-flex flex-column flex-md-row align-items-md-end gap-3 mb-4">
+        <div>
+            <h1 class="display-6 mb-1">Customer Orders</h1>
+            <p class="text-muted mb-0">Search by Customer ID or load the latest orders.</p>
+        </div>
+        <div class="ms-md-auto">
+            <span class="badge text-bg-light border">Source: NorthWind database</span>
+        </div>
+    </div>
+
+    <div class="row g-3 align-items-end mb-3">
+        <div class="col-12 col-md-4">
+            <label for="customerId" class="form-label">Customer ID</label>
+            <input id="customerId"
+                   type="text"
+                   class="form-control"
+                   placeholder="e.g. ALFKI"
+                   ng-model="vm.customerId"
+                   ng-keyup="$event.keyCode === 13 && vm.loadOrders()" />
+        </div>
+        <div class="col-12 col-md-3">
+            <label for="takeCount" class="form-label">Max results</label>
+            <input id="takeCount"
+                   type="number"
+                   class="form-control"
+                   min="1"
+                   max="200"
+                   ng-model="vm.take"
+                   ng-init="vm.take = 50" />
+        </div>
+        <div class="col-12 col-md-5 d-flex gap-2">
+            <button type="button" class="btn btn-primary" ng-click="vm.loadOrders()" ng-disabled="vm.isLoading">
+                Load orders
+            </button>
+            <button type="button" class="btn btn-outline-secondary" ng-click="vm.reset()" ng-disabled="vm.isLoading">
+                Reset
+            </button>
+        </div>
+    </div>
+
+    <div class="alert alert-warning" role="alert" ng-if="vm.error">
+        {{ vm.error }}
+    </div>
+
+    <div class="d-flex align-items-center gap-2 text-muted mb-2" ng-if="vm.isLoading">
+        <div class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></div>
+        <span>Loading orders...</span>
+    </div>
+
+    <div class="table-responsive" ng-if="!vm.isLoading">
+        <table class="table table-striped align-middle" ng-if="vm.orders.length">
+            <thead>
+                <tr>
+                    <th>Order #</th>
+                    <th>Customer</th>
+                    <th>Company</th>
+                    <th>Order Date</th>
+                    <th>Shipped</th>
+                    <th>Ship To</th>
+                    <th class="text-end">Freight</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="order in vm.orders track by order.orderID">
+                    <td>{{ order.orderID }}</td>
+                    <td>{{ order.customerID || "—" }}</td>
+                    <td>{{ order.companyName || "—" }}</td>
+                    <td>{{ order.orderDate | date:"mediumDate" }}</td>
+                    <td>{{ order.shippedDate | date:"mediumDate" }}</td>
+                    <td>
+                        <div class="fw-semibold">{{ order.shipName || "—" }}</div>
+                        <div class="text-muted small">{{ order.shipCity || "—" }}, {{ order.shipCountry || "—" }}</div>
+                    </td>
+                    <td class="text-end">{{ order.freight | currency }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="alert alert-info" role="alert" ng-if="!vm.isLoading && !vm.orders.length && !vm.error">
+        No orders found. Try a different Customer ID.
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+    <script>
+        (function () {
+            "use strict";
+
+            angular
+                .module("ordersApp", [])
+                .controller("OrdersController", function ($http) {
+                    var vm = this;
+
+                    vm.customerId = "";
+                    vm.orders = [];
+                    vm.isLoading = false;
+                    vm.error = null;
+                    vm.take = 50;
+
+                    vm.loadOrders = function () {
+                        vm.isLoading = true;
+                        vm.error = null;
+
+                        var params = {
+                            take: vm.take || 50
+                        };
+
+                        if (vm.customerId && vm.customerId.trim()) {
+                            params.customerId = vm.customerId.trim();
+                        }
+
+                        $http.get("/api/orders", { params: params })
+                            .then(function (response) {
+                                vm.orders = response.data || [];
+                            })
+                            .catch(function () {
+                                vm.error = "Unable to load orders right now. Please try again.";
+                            })
+                            .finally(function () {
+                                vm.isLoading = false;
+                            });
+                    };
+
+                    vm.reset = function () {
+                        vm.customerId = "";
+                        vm.take = 50;
+                        vm.loadOrders();
+                    };
+
+                    vm.loadOrders();
+                });
+        })();
+    </script>
+}
