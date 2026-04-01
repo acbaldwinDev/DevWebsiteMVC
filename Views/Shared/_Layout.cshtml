@@ -27,16 +27,31 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="AngularExample">AngularJS Example</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="AngularOrders">AngularJS Orders</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="NorthWind" asp-action="Products">NorthWind Products</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ReportIssue">Report Issue</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark"
+                               href="#"
+                               role="button"
+                               data-bs-toggle="dropdown"
+                               aria-expanded="false">
+                                Angular Examples
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="AngularExample">
+                                        AngularJS Example
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="AngularOrders">
+                                        AngularJS Orders
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </div>
